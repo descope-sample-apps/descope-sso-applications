@@ -1,6 +1,6 @@
 import { createSdk, session } from "@descope/nextjs-sdk/server";
 
-interface ExtendedUserResponse extends UserResponse {
+interface UserResponse {
   ssoAppIds?: string[];
 }
 
@@ -41,7 +41,7 @@ export async function GET(req: Request) {
     return new Response("Not found", { status: 404 });
   }
 
-  const userData = res.data as ExtendedUserResponse;
+  const userData = res.data as UserResponse;
   if (!userData.ssoAppIds) {
     return new Response(JSON.stringify([]), { status: 200 });
   }

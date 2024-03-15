@@ -10,13 +10,14 @@ import { FrameworkRotation } from "@/components/framework-rotation";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 
+import "./tailwind.css";
+
 export default function Home() {
   const [currentFramework, setCurrentFramework] = useState<Framework>(
     frameworks[0]
   );
 
   const [showBackground, setShowBackground] = useState(false);
-
   const { isAuthenticated } = useSession();
 
   useEffect(() => {

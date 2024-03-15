@@ -14,8 +14,19 @@ export default function SignInPage() {
   }, [router]);
 
   const handleLogout = useCallback(() => {
-    router.push("/");
+    router.push("/sign-out");
   }, [router]);
+
+  const urlParams = new URLSearchParams(window.location.search);
+
+  const flowId =
+    urlParams.get("flow") || process.env.DESCOPE_FLOW_ID || "sign-up-or-in";
+
+  const debug =
+    urlParams.get("debug") === "true" ||
+    process.env.DESCOPE_FLOW_DEBUG === "true";
+
+  const tenantId = urlParams.get("tenant") || process.env.DESCOPE_TENANT_ID;
 
   return (
     <div className="flex items-center justify-center min-h-screen">
@@ -48,7 +59,9 @@ export default function SignInPage() {
       <div className="max-w-7xl mt-20 mx-auto">
         <div className="flex flex-col items-center relative z-10">
           <Descope
-            flowId="sign-up-or-in"
+            flowId={flowId}
+            debug={debug}
+            tenant={tenantId}
             onSuccess={handleLogin}
             onError={handleLogout}
           />
