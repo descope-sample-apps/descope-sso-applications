@@ -12,10 +12,10 @@ export default function Header() {
               alt="Descope"
               className="aspect-[1/1] overflow-hidden rounded-lg object-contain object-center"
               height="40"
-              src="/descope-logo.png"
+              src="/logos/descope-logo.png"
               width="40"
             />
-            <h1 className="text-lg font-semibold text-black">Applications</h1>
+            <h1 className="text-lg font-semibold">Applications</h1>
           </div>
         </div>
 

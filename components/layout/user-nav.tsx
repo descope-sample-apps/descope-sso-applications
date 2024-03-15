@@ -20,13 +20,15 @@ export function UserNav() {
   const router = useRouter();
 
   if (user) {
+    const isAdmin = user?.customAttributes?.descoper;
+
     return (
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <Button variant="ghost" className="relative h-8 w-8 rounded-full">
             <Avatar className="h-8 w-8">
               <AvatarImage src={user?.picture ?? ""} alt={user?.name ?? ""} />
-              <AvatarFallback>{user?.name?.[0]}</AvatarFallback>
+              <AvatarFallback>{user?.name?.[0] || "U"}</AvatarFallback>
             </Avatar>
           </Button>
         </DropdownMenuTrigger>
@@ -40,17 +42,29 @@ export function UserNav() {
             </div>
           </DropdownMenuLabel>
           <DropdownMenuSeparator />
-          <DropdownMenuGroup>
-            <DropdownMenuItem>
-              Profile
-              <DropdownMenuShortcut>⇧⌘P</DropdownMenuShortcut>
-            </DropdownMenuItem>
-            <DropdownMenuItem>
-              Settings
-              <DropdownMenuShortcut>⌘S</DropdownMenuShortcut>
-            </DropdownMenuItem>
-          </DropdownMenuGroup>
-          <DropdownMenuSeparator />
+          {isAdmin && (
+            <>
+              <DropdownMenuGroup>
+                <DropdownMenuItem
+                  onClick={() => {
+                    router.push("/profile");
+                  }}
+                >
+                  Profile
+                  <DropdownMenuShortcut>⇧⌘P</DropdownMenuShortcut>
+                </DropdownMenuItem>
+                <DropdownMenuItem
+                  onClick={() => {
+                    router.push("/settings");
+                  }}
+                >
+                  Settings
+                  <DropdownMenuShortcut>⌘S</DropdownMenuShortcut>
+                </DropdownMenuItem>
+              </DropdownMenuGroup>
+              <DropdownMenuSeparator />
+            </>
+          )}
           <DropdownMenuItem onClick={() => router.push("/sign-out")}>
             Sign Out
             <DropdownMenuShortcut>⇧⌘Q</DropdownMenuShortcut>

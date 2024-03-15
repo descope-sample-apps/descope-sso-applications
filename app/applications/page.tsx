@@ -1,6 +1,17 @@
 "use client";
 
 import { Card, CardContent } from "@/components/ui/card";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogClose,
+  DialogTrigger,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import Image from "next/image";
 import Link from "next/link";
@@ -67,13 +78,18 @@ export default function AppPage() {
     );
   }
 
+  const isAdmin = user?.customAttributes?.descoper;
+
   return (
     <div className="flex flex-col min-h-screen">
       <main className="flex-1 overflow-y-auto pt-20 pb-4 px-4">
         {apps.length > 0 ? (
           <div className="max-w-6xl mx-auto grid gap-6 grid-cols-2 sm:grid-cols-3 lg:grid-cols-4">
             {apps.map((app) => (
-              <Card key={app.id} className="bg-card">
+              <Card
+                key={app.id}
+                className="bg-white shadow rounded-lg overflow-hidden"
+              >
                 <CardContent className="relative flex flex-col items-center justify-center p-6">
                   <Link
                     href={
@@ -82,20 +98,71 @@ export default function AppPage() {
                     }
                     passHref
                   >
-                    <div className="flex flex-col">
-                      <Image
-                        alt={app.name}
-                        className="aspect-[1/1] overflow-hidden rounded-lg object-contain object-center mb-2"
-                        height="80"
-                        src={app.logo || "/placeholder-logo.png"}
-                        width="80"
-                      />
-                      <p className="text-lg font-semibold mb-2">{app.name}</p>
+                    <div className="flex flex-col items-center justify-center text-center">
+                      {app.logo ? (
+                        <div className="w-20 h-20 flex items-center justify-center overflow-hidden">
+                          <Image
+                            alt={app.name}
+                            className="object-contain"
+                            src={app.logo}
+                            height="80"
+                            width="80"
+                          />
+                        </div>
+                      ) : (
+                        <div className="w-20 h-20 relative rounded-full flex items-center justify-center text-2xl font-semibold bg-gray-100 dark:bg-gray-800">
+                          {app.name.charAt(0)}
+                        </div>
+                      )}
+                      <p className="text-lg font-semibold mt-2">{app.name}</p>
                     </div>
                   </Link>
                 </CardContent>
               </Card>
             ))}
+            {isAdmin && (
+              <Card className="bg-white shadow rounded-lg overflow-hidden">
+                <Dialog>
+                  <Link href={""} passHref>
+                    <DialogTrigger asChild>
+                      <CardContent className="relative flex flex-col items-center justify-center p-6">
+                        <div className="flex flex-col items-center justify-center text-center">
+                          <div className="w-20 h-20 relative rounded-full flex items-center justify-center text-3xl font-semibold bg-gray-100 dark:bg-gray-800">
+                            +
+                          </div>
+                          <p className="text-lg font-semibold mt-2">
+                            Create New App
+                          </p>
+                        </div>
+                      </CardContent>
+                    </DialogTrigger>
+                    <DialogContent className="sm:max-w-md">
+                      <DialogHeader>
+                        <DialogTitle>Create New App</DialogTitle>
+                      </DialogHeader>
+                      <DialogDescription>
+                        You can create a new application in the Descope Console,
+                        under{" "}
+                        <Link
+                          className={"font-semibold"}
+                          href={"https://app.descope.com/applications"}
+                        >
+                          Applications
+                        </Link>
+                        .
+                      </DialogDescription>
+                      <DialogFooter className="sm:justify-start">
+                        <DialogClose asChild>
+                          <Button type="button" variant="default">
+                            Close
+                          </Button>
+                        </DialogClose>
+                      </DialogFooter>
+                    </DialogContent>
+                  </Link>
+                </Dialog>
+              </Card>
+            )}
           </div>
         ) : (
           <div className="text-center py-10">
