@@ -16,7 +16,7 @@ import { Progress } from "@/components/ui/progress";
 import Image from "next/image";
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
-import { useSession, useUser } from "@descope/nextjs-sdk/client";
+import { useUser } from "@descope/nextjs-sdk/client";
 
 import "./tailwind.css";
 
@@ -36,7 +36,6 @@ export default function AppPage() {
   const [apps, setApps] = useState<SSOApplication[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [progress, setProgress] = React.useState(13);
-  const { isAuthenticated } = useSession();
   const { user } = useUser();
 
   useEffect(() => {
@@ -83,7 +82,7 @@ export default function AppPage() {
   return (
     <div className="flex flex-col min-h-screen">
       <main className="flex-1 overflow-y-auto pt-20 pb-4 px-4">
-        {apps.length > 0 ? (
+        {apps.length > 0 && user ? (
           <div className="max-w-6xl mx-auto grid gap-6 grid-cols-2 sm:grid-cols-3 lg:grid-cols-4">
             {apps.map((app) => (
               <Card

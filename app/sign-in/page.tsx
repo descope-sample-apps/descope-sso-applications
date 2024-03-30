@@ -1,33 +1,10 @@
 "use client";
 
 import { Descope } from "@descope/nextjs-sdk";
-import { useCallback } from "react";
-import { useRouter } from "next/navigation";
 import Image from "next/image";
 import { assets } from "@/utils/assets";
 
 export default function SignInPage() {
-  const router = useRouter();
-
-  const handleLogin = useCallback(() => {
-    router.push("/applications");
-  }, [router]);
-
-  const handleLogout = useCallback(() => {
-    router.push("/sign-out");
-  }, [router]);
-
-  const urlParams = new URLSearchParams(window.location.search);
-
-  const flowId =
-    urlParams.get("flow") || process.env.DESCOPE_FLOW_ID || "sign-up-or-in";
-
-  const debug =
-    urlParams.get("debug") === "true" ||
-    process.env.DESCOPE_FLOW_DEBUG === "true";
-
-  const tenantId = urlParams.get("tenant") || process.env.DESCOPE_TENANT_ID;
-
   return (
     <div className="flex items-center justify-center min-h-screen">
       <div
@@ -50,20 +27,13 @@ export default function SignInPage() {
           backgroundSize: "30px",
         }}
       />
-      <div
-        className={
-          "bg-black fixed inset-0 transition-opacity duration-1000 opacity-0"
-        }
-      />
 
-      <div className="max-w-7xl mt-20 mx-auto">
+      <div className="max-w-3xl mt-20 mx-auto">
         <div className="flex flex-col items-center relative z-10">
           <Descope
-            flowId={flowId}
-            debug={debug}
-            tenant={tenantId}
-            onSuccess={handleLogin}
-            onError={handleLogout}
+            flowId={process.env.NEXT_PUBLIC_DESCOPE_FLOW_ID || "sign-up-or-in"}
+            redirectAfterSuccess="/applications"
+            redirectAfterError="/"
           />
         </div>
       </div>

@@ -17,12 +17,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <AuthProvider
-      projectId={
-        process.env.NEXT_PUBLIC_DESCOPE_PROJECT_ID ||
-        "P2dI567joFhavCcJGyGndtyHdFtF"
-      }
-    >
+    <AuthProvider projectId={process.env.NEXT_PUBLIC_DESCOPE_PROJECT_ID || ""}>
       <html lang="en" suppressHydrationWarning>
         <Providers>
           <body className={inter.className}>{children}</body>

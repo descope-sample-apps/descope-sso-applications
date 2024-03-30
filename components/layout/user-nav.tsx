@@ -11,13 +11,20 @@ import {
   DropdownMenuShortcut,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { useSession, useUser } from "@descope/nextjs-sdk/client";
+import { useUser, useDescope } from "@descope/nextjs-sdk/client";
 import { useRouter } from "next/navigation";
+import { useCallback } from "react";
 
 export function UserNav() {
-  const { isAuthenticated } = useSession();
   const { user } = useUser();
+  const sdk = useDescope();
+
   const router = useRouter();
+
+  const handleLogout = useCallback(() => {
+    sdk.logout();
+    router.push("/");
+  }, [sdk, router]);
 
   if (user) {
     const isAdmin = user?.customAttributes?.descoper;
@@ -45,7 +52,7 @@ export function UserNav() {
           {isAdmin && (
             <>
               <DropdownMenuGroup>
-                <DropdownMenuItem
+                {/* <DropdownMenuItem
                   onClick={() => {
                     router.push("/profile");
                   }}
@@ -60,12 +67,12 @@ export function UserNav() {
                 >
                   Settings
                   <DropdownMenuShortcut>⌘S</DropdownMenuShortcut>
-                </DropdownMenuItem>
+                </DropdownMenuItem> */}
               </DropdownMenuGroup>
               <DropdownMenuSeparator />
             </>
           )}
-          <DropdownMenuItem onClick={() => router.push("/sign-out")}>
+          <DropdownMenuItem onClick={handleLogout}>
             Sign Out
             <DropdownMenuShortcut>⇧⌘Q</DropdownMenuShortcut>
           </DropdownMenuItem>

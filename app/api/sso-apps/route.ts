@@ -42,27 +42,37 @@ export async function GET(req: Request) {
   }
 
   const userData = res.data as UserResponse;
-  if (!userData.ssoAppIds) {
-    return new Response(JSON.stringify([]), { status: 200 });
+  let ssoAppsPromise;
+
+  if (!userData.ssoAppIds || userData.ssoAppIds.length === 0) {
+    // Fetch all applications if no specific apps are assigned to the user
+    const allAppsUrl = "https://api.descope.com/v1/mgmt/sso/idp/apps/load";
+    ssoAppsPromise = fetch(allAppsUrl, {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${process.env.NEXT_PUBLIC_DESCOPE_PROJECT_ID}:${process.env.DESCOPE_MANAGEMENT_KEY}`,
+      },
+    }).then((res) => (res.ok ? res.json().then((data) => data.apps) : []));
+  } else {
+    // Fetch specific applications assigned to the user
+    ssoAppsPromise = Promise.all(
+      userData.ssoAppIds.map(async (appId) => {
+        const appUrl = `https://api.descope.com/v1/mgmt/sso/idp/app/load?id=${appId}`;
+        const appRes = await fetch(appUrl, {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${process.env.NEXT_PUBLIC_DESCOPE_PROJECT_ID}:${process.env.DESCOPE_MANAGEMENT_KEY}`,
+          },
+        });
+        return appRes.ok ? appRes.json() : null;
+      })
+    );
   }
 
-  const ssoApps = await Promise.all(
-    // TODO: Include IdP initiated SSO URL in Descope API response
-    userData.ssoAppIds.map(async (appId) => {
-      const appUrl = `https://api.descope.com/v1/mgmt/sso/idp/app/load?id=${appId}`;
-      const appRes = await fetch(appUrl, {
-        method: "GET",
-        headers: {
-          Authorization: `Bearer ${process.env.NEXT_PUBLIC_DESCOPE_PROJECT_ID}:${process.env.DESCOPE_MANAGEMENT_KEY}`,
-        },
-      });
-      if (!appRes.ok) return null;
-      return appRes.json();
-    })
-  );
+  const ssoApps = await ssoAppsPromise;
 
   // Filter for SAML apps and map to required fields
-  const validSamlApps = ssoApps
+  const validSamlApps = (Array.isArray(ssoApps) ? ssoApps : [ssoApps])
     .filter((app) => app !== null && app.appType === "saml")
     .map((app: SSOApplication) => ({
       description: app.description,
@@ -71,6 +81,7 @@ export async function GET(req: Request) {
       id: app.id,
       logo: app.logo,
       samlSettings: {
+        // Create the IdP initiated SSO URL since it isn't returned by default by the Descope API
         idpSsoUrl: app.samlSettings.idpSsoUrl.replace("/sso", "/initiate"),
       },
     }));
