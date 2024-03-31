@@ -27,7 +27,8 @@ export function UserNav() {
   }, [sdk, router]);
 
   if (user) {
-    const isAdmin = user?.customAttributes?.descoper;
+    // TODO: Add a settings page for admins to restrict and allow access to applications
+    // const isAdmin = user?.customAttributes?.descoper;
 
     return (
       <DropdownMenu>
@@ -48,30 +49,27 @@ export function UserNav() {
               </p>
             </div>
           </DropdownMenuLabel>
+          {/* {isAdmin && (
+            <DropdownMenuItem
+              onClick={() => {
+                router.push("/settings");
+              }}
+            >
+              Settings
+              <DropdownMenuShortcut>⇧⌘S</DropdownMenuShortcut>
+            </DropdownMenuItem>
+          )} */}
           <DropdownMenuSeparator />
-          {isAdmin && (
-            <>
-              {/* <DropdownMenuGroup>
-                <DropdownMenuItem
-                  onClick={() => {
-                    router.push("/profile");
-                  }}
-                >
-                  Profile
-                  <DropdownMenuShortcut>⇧⌘P</DropdownMenuShortcut>
-                </DropdownMenuItem>
-                <DropdownMenuItem
-                  onClick={() => {
-                    router.push("/settings");
-                  }}
-                >
-                  Settings
-                  <DropdownMenuShortcut>⌘S</DropdownMenuShortcut>
-                </DropdownMenuItem>
-              </DropdownMenuGroup> */}
-              <DropdownMenuSeparator />
-            </>
-          )}
+          <DropdownMenuItem>
+            <a
+              href={
+                "https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fdescope-sample-apps%2Fdescope-sso-applications&env=NEXT_PUBLIC_DESCOPE_PROJECT_ID,DESCOPE_MANAGEMENT_KEY"
+              }
+            >
+              Deploy to Vercel
+            </a>
+            <DropdownMenuShortcut>⌘D</DropdownMenuShortcut>
+          </DropdownMenuItem>
           <DropdownMenuItem onClick={handleLogout}>
             Sign Out
             <DropdownMenuShortcut>⇧⌘Q</DropdownMenuShortcut>

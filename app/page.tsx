@@ -186,17 +186,6 @@ export default function Home() {
               </Link>
             </div>
           )}
-          <p className="tracking-tighter text-2xl mb-12">
-            To use this with your own Descope project click here:{" "}
-            <a
-              href={
-                "https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fdescope-sample-apps%2Fdescope-sso-applications&env=NEXT_PUBLIC_DESCOPE_PROJECT_ID,DESCOPE_MANAGEMENT_KEY"
-              }
-              className={"font-bold"}
-            >
-              Deploy to Vercel
-            </a>
-          </p>
         </div>
       </div>
     </main>
