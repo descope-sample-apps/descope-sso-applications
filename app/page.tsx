@@ -1,7 +1,6 @@
 "use client";
 
 import Link from "next/link";
-import { useSearchParams } from "next/navigation";
 import { useState, useEffect } from "react";
 import { useSession } from "@descope/nextjs-sdk/client";
 import Image from "next/image";
@@ -21,36 +20,6 @@ export default function Home() {
   const [projectId, setProjectId] = useState<string | null>(null);
   const [showBackground, setShowBackground] = useState(false);
   const { isAuthenticated } = useSession();
-
-  const searchParams = useSearchParams();
-
-  useEffect(() => {
-    const projectIdParam =
-      searchParams.get("project") || localStorage.getItem("projectId");
-
-    // If signed in with another project ID
-    if (projectIdParam !== localStorage.getItem("projectId")) {
-      localStorage.removeItem("DSR");
-      localStorage.removeItem("DS");
-    }
-
-    const flowIdParam =
-      searchParams.get("flow") || localStorage.getItem("flowId");
-
-    // If using a different flow then was previously defined
-    if (flowIdParam !== localStorage.getItem("flowId")) {
-      localStorage.removeItem("DSR");
-      localStorage.removeItem("DS");
-    }
-
-    if (projectIdParam && typeof window !== "undefined") {
-      if (flowIdParam && localStorage.getItem("flowId") !== flowIdParam) {
-        localStorage.setItem("flowId", flowIdParam as string);
-      }
-      localStorage.setItem("projectId", projectIdParam as string);
-      setProjectId(projectIdParam);
-    }
-  }, [projectId, searchParams]);
 
   useEffect(() => {
     let currentIndex = 0;
