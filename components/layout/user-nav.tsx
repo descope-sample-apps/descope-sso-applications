@@ -51,8 +51,8 @@ export function UserNav() {
           <DropdownMenuSeparator />
           {isAdmin && (
             <>
-              <DropdownMenuGroup>
-                {/* <DropdownMenuItem
+              {/* <DropdownMenuGroup>
+                <DropdownMenuItem
                   onClick={() => {
                     router.push("/profile");
                   }}
@@ -67,8 +67,8 @@ export function UserNav() {
                 >
                   Settings
                   <DropdownMenuShortcut>⌘S</DropdownMenuShortcut>
-                </DropdownMenuItem> */}
-              </DropdownMenuGroup>
+                </DropdownMenuItem>
+              </DropdownMenuGroup> */}
               <DropdownMenuSeparator />
             </>
           )}

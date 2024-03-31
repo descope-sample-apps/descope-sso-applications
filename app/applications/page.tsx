@@ -95,7 +95,8 @@ export default function AppPage() {
                       app.samlSettings.idpSsoUrl + `&tenant=${user.email}` ||
                       "#!"
                     }
-                    passHref
+                    rel="noopener noreferrer"
+                    target="_blank"
                   >
                     <div className="flex flex-col items-center justify-center text-center">
                       {app.logo ? (
