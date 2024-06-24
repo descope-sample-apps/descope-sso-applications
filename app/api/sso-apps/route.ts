@@ -44,7 +44,7 @@ export async function GET(req: Request) {
   const userData = res.data as UserResponse;
   let ssoAppsPromise;
   let baseURL = "api.descope.com"
-  if (process.env.NEXT_PUBLIC_DESCOPE_PROJECT_ID.length >= 32) {
+  if (process.env.NEXT_PUBLIC_DESCOPE_PROJECT_ID && process.env.NEXT_PUBLIC_DESCOPE_PROJECT_ID.length >= 32) {
     const localURL = process.env.NEXT_PUBLIC_DESCOPE_PROJECT_ID.substring(1, 5)
     baseURL = [baseURL.slice(0, 4), localURL, ".", baseURL.slice(4)].join('') 
   }
