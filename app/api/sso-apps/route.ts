@@ -43,10 +43,14 @@ export async function GET(req: Request) {
 
   const userData = res.data as UserResponse;
   let ssoAppsPromise;
-
+  let baseURL = "api.descope.com"
+  if (process.env.NEXT_PUBLIC_DESCOPE_PROJECT_ID && process.env.NEXT_PUBLIC_DESCOPE_PROJECT_ID.length >= 32) {
+    const localURL = process.env.NEXT_PUBLIC_DESCOPE_PROJECT_ID.substring(1, 5)
+    baseURL = [baseURL.slice(0, 4), localURL, ".", baseURL.slice(4)].join('') 
+  }
   if (!userData.ssoAppIds || userData.ssoAppIds.length === 0) {
     // Fetch all applications if no specific apps are assigned to the user
-    const allAppsUrl = "https://api.descope.com/v1/mgmt/sso/idp/apps/load";
+    const allAppsUrl = `https://${baseURL}/v1/mgmt/sso/idp/apps/load`;
     ssoAppsPromise = fetch(allAppsUrl, {
       method: "GET",
       headers: {
@@ -57,7 +61,7 @@ export async function GET(req: Request) {
     // Fetch specific applications assigned to the user
     ssoAppsPromise = Promise.all(
       userData.ssoAppIds.map(async (appId) => {
-        const appUrl = `https://api.descope.com/v1/mgmt/sso/idp/app/load?id=${appId}`;
+        const appUrl = `https://${baseURL}/v1/mgmt/sso/idp/app/load?id=${appId}`;
         const appRes = await fetch(appUrl, {
           method: "GET",
           headers: {
